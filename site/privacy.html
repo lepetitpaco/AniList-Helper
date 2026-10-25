@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy policy · AniList Helper</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0b1622; --ink: #edf1f5; --text: #9fadbd; --muted: #728aa1; --blue: #3db4f2; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: Overpass, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.7; }
+    main { max-width: 760px; margin: 0 auto; padding: 40px 20px 64px; }
+    a { color: var(--blue); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; text-decoration: none; }
+    .brand img { width: 28px; height: 28px; }
+    h1 { color: var(--ink); font-size: 36px; margin: 32px 0 4px; }
+    h2 { color: var(--ink); font-size: 20px; margin: 32px 0 6px; }
+    .updated { color: var(--muted); margin: 0; }
+    code { padding: 1px 6px; border-radius: 4px; background: #1c2a3d; color: var(--ink); font-size: .9em; }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="brand" href="./"><img src="icon.svg" alt="">AniList Helper</a>
+    <h1>Privacy policy</h1>
+    <p class="updated">Last updated: October 25, 2026</p>
+
+    <h2>Summary</h2>
+    <p>AniList Helper does not collect, sell, share or transmit any personal data. It has no servers, no analytics and no tracking. Everything it saves stays in your browser.</p>
+
+    <h2>What the extension stores, and where</h2>
+    <ul>
+      <li><strong>List filters</strong> (search, format, status, genres, country, year, sort) of the AniList lists you open, in anilist.co's local storage under keys starting with <code>anilist-helper:</code>. They are also written to the page URL so you can share them.</li>
+      <li><strong>Page preferences</strong> (stats sorting, voice actor language, role sorting), in anilist.co's local storage under keys starting with <code>anilist-helper:</code>.</li>
+      <li><strong>Bookmarks</strong> (page address, title, type and cover image address of the pages you bookmark), in the extension's local storage on your device.</li>
+      <li><strong>Settings</strong> (which features are turned on), in the extension's sync storage, which your browser may sync between your own devices if you enabled browser sync.</li>
+    </ul>
+
+    <h2>Network access</h2>
+    <p>The extension makes no network requests of its own. It never calls AniList's API and never changes anything on your AniList account. It only runs on <code>anilist.co</code> pages, where it reads and adjusts the page you are viewing.</p>
+
+    <h2>Permissions</h2>
+    <ul>
+      <li><code>storage</code>: to save your settings and bookmarks.</li>
+      <li>Access to <code>https://anilist.co/*</code>: to add the features to AniList's pages.</li>
+    </ul>
+
+    <h2>Removing your data</h2>
+    <p>Uninstalling the extension deletes its storage (bookmarks and settings). Filters and preferences saved in anilist.co's local storage are removed when you clear that site's data in your browser; the Reset button of a list clears its filters.</p>
+
+    <h2>Contact</h2>
+    <p>Questions or concerns: <a href="https://github.com/lepetitpaco/AniList-Helper/issues">open an issue on GitHub</a>.</p>
+  </main>
+</body>
+</html>

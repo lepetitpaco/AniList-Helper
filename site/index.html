@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- GitHub Pages site, published by .github/workflows/pages.yml with the visuals of store/ -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AniList Helper</title>
+  <meta name="description" content="Browser extension for AniList: persistent and shareable list filters, one-click bookmarks, remembered sorting and voice actor language. No API calls, no tracking.">
+  <meta property="og:title" content="AniList Helper">
+  <meta property="og:description" content="Your AniList, remembered. Persistent filters, bookmarks and remembered preferences.">
+  <meta property="og:image" content="https://lepetitpaco.github.io/AniList-Helper/promo-marquee-1400x560.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1622;
+      --card: #151f2e;
+      --card-2: #1c2a3d;
+      --ink: #edf1f5;
+      --text: #9fadbd;
+      --muted: #728aa1;
+      --line: rgba(159, 173, 189, .15);
+      --blue: #3db4f2;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: Overpass, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6; }
+    a { color: var(--blue); }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+    header { padding: 20px 0; }
+    header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; text-decoration: none; }
+    .brand img { width: 32px; height: 32px; }
+    header nav { display: flex; gap: 20px; }
+    header nav a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 15px; }
+    header nav a:hover { color: var(--ink); }
+
+    .hero {
+      padding: 64px 0 40px;
+      text-align: center;
+      background: radial-gradient(800px 400px at 50% 0%, rgba(61, 180, 242, .18), transparent 70%);
+    }
+    .hero img.logo { width: 88px; height: 88px; }
+    .hero h1 { margin: 18px 0 10px; color: var(--ink); font-size: clamp(36px, 6vw, 58px); line-height: 1.05; letter-spacing: -.02em; }
+    .hero p { max-width: 640px; margin: 0 auto; font-size: 19px; }
+    .cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px; }
+    .button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 6px; background: var(--blue); color: #fff; font-weight: 700; text-decoration: none; }
+    .button.ghost { background: var(--card); color: var(--ink); }
+    .button:hover { filter: brightness(1.08); }
+    .note { margin-top: 14px; font-size: 14px; color: var(--muted); }
+
+    .shot { margin: 40px auto 0; max-width: 1000px; }
+    .shot img { width: 100%; border-radius: 10px; box-shadow: 0 30px 80px rgba(0, 0, 0, .5); }
+
+    section { padding: 56px 0; }
+    h2 { margin: 0 0 8px; color: var(--ink); font-size: 32px; letter-spacing: -.01em; }
+    .sub { margin: 0 0 30px; font-size: 17px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .card { padding: 22px; border-radius: 8px; background: var(--card); }
+    .card h3 { margin: 0 0 6px; color: var(--ink); font-size: 18px; }
+    .card p { margin: 0; font-size: 15px; }
+
+    .gallery { display: grid; gap: 28px; }
+    .gallery figure { margin: 0; }
+    .gallery img { width: 100%; border-radius: 10px; display: block; }
+    .gallery figcaption { margin-top: 8px; font-size: 14px; color: var(--muted); text-align: center; }
+
+    .privacy { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; list-style: none; padding: 0; margin: 0; }
+    .privacy li { padding: 16px 18px; border-radius: 8px; background: var(--card); color: var(--ink); font-weight: 600; }
+    .privacy li span { display: block; color: var(--text); font-weight: 400; font-size: 14px; }
+
+    details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+    summary { cursor: pointer; color: var(--ink); font-weight: 700; }
+    details p { margin: 10px 0 0; }
+    code { padding: 1px 6px; border-radius: 4px; background: var(--card-2); color: var(--ink); font-size: .9em; word-break: break-all; }
+
+    footer { padding: 36px 0 48px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="brand" href="./"><img src="icon.svg" alt="">AniList Helper</a>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#privacy">Privacy</a>
+        <a href="https://github.com/lepetitpaco/AniList-Helper">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="wrap">
+      <img class="logo" src="icon.svg" alt="">
+      <h1>Your AniList, remembered.</h1>
+      <p>A small browser extension for the things AniList forgets every time you reload: list filters, bookmarks, sorting and voice actor language.</p>
+      <div class="cta">
+        <a class="button" href="https://github.com/lepetitpaco/AniList-Helper/releases/latest">Download for Chrome / Edge</a>
+        <a class="button ghost" href="https://github.com/lepetitpaco/AniList-Helper/releases/latest">Download for Firefox</a>
+      </div>
+      <p class="note">Chrome Web Store and Firefox Add-ons listings are on their way.</p>
+      <div class="shot"><img src="screenshots/1-your-anilist-remembered.png" alt="An AniList anime list filtered by format and genres, with the filters in the URL"></div>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="wrap">
+      <h2>What it does</h2>
+      <p class="sub">Every feature has its own switch in the extension popup.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Persistent list filters</h3>
+          <p>Search, format, status, genres, country, year and sort on anime and manga lists survive a reload. A Reset button clears them.</p>
+        </div>
+        <div class="card">
+          <h3>Shareable filtered lists</h3>
+          <p>Filters live in the URL, like <code>?format=TV&amp;genres=Action,Comedy</code>. Anyone with the extension opens the list exactly as you see it.</p>
+        </div>
+        <div class="card">
+          <h3>Bookmarks &amp; quick links</h3>
+          <p>One click next to the heart saves an anime, manga, character, staff or studio. Find them under Bookmarks in the top bar, or with Alt+B.</p>
+        </div>
+        <div class="card">
+          <h3>Remembered preferences</h3>
+          <p>Stats sorting, voice actor language, and role sorting on staff and character pages stay the way you left them.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap gallery">
+      <figure><img src="screenshots/2-shareable-filters.png" alt="A filtered planning list shared as a link"><figcaption>Filters that stick, links that share</figcaption></figure>
+      <figure><img src="screenshots/3-bookmarks.png" alt="The bookmarks menu open under AniList's top bar"><figcaption>Bookmarks one click away</figcaption></figure>
+      <figure><img src="screenshots/4-remembered-preferences.png" alt="Voice actor language and stats sorting kept between pages"><figcaption>Pick it once, it stays</figcaption></figure>
+      <figure><img src="screenshots/5-settings.png" alt="The extension popup with one switch per feature"><figcaption>Turn any feature on or off</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="wrap">
+      <h2>Private by design</h2>
+      <p class="sub">AniList Helper only changes how anilist.co behaves in your browser. <a href="privacy.html">Privacy policy</a></p>
+      <ul class="privacy">
+        <li>No AniList API calls<span>It never talks to AniList's API and never changes anything on your account.</span></li>
+        <li>No tracking<span>No analytics, no ads, no account, no remote code.</span></li>
+        <li>Stays in your browser<span>Filters and preferences in anilist.co's local storage, bookmarks and settings in the extension's storage.</span></li>
+        <li>Open source<span>Read every line on <a href="https://github.com/lepetitpaco/AniList-Helper">GitHub</a>.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Do the people I send a filtered link to need the extension?</summary>
+        <p>Yes, to see the filters. Without it, AniList simply ignores the extra URL parameters and shows the list unfiltered.</p>
+      </details>
+      <details>
+        <summary>Where are my bookmarks stored?</summary>
+        <p>In your browser's extension storage, on this device. They are never uploaded anywhere.</p>
+      </details>
+      <details>
+        <summary>The bookmark buttons get in my way.</summary>
+        <p>Open the extension popup: under Bookmarks &amp; quick links you can hide the top bar menu, the button next to the heart or the floating button on small screens, or turn the whole feature off.</p>
+      </details>
+      <details>
+        <summary>Something broke after an AniList update.</summary>
+        <p>The extension hooks into AniList's page, so a redesign can break it. Please <a href="https://github.com/lepetitpaco/AniList-Helper/issues">open an issue</a>.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span>AniList Helper is an independent project, not affiliated with or endorsed by AniList.</span>
+      <span><a href="https://github.com/lepetitpaco/AniList-Helper">Source</a> · <a href="privacy.html">Privacy</a></span>
+    </div>
+  </footer>
+</body>
+</html>

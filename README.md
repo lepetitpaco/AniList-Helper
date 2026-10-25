@@ -38,7 +38,7 @@ Store listings are on their way. Meanwhile, download the zip for your browser fr
 
 - **Chrome / Edge / Brave**: unzip `anilist-helper-chrome.zip`, open `chrome://extensions`, turn on
   Developer mode, click "Load unpacked" and pick the unzipped folder.
-- **Firefox** (128+): open `about:debugging#/runtime/this-firefox`, click "Load Temporary Add-on" and
+- **Firefox** (140+): open `about:debugging#/runtime/this-firefox`, click "Load Temporary Add-on" and
   pick `anilist-helper-firefox.zip` (temporary add-ons are removed when Firefox closes).
 
 ## How it works

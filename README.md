@@ -66,7 +66,7 @@ store/render.sh          # icons and store visuals (Docker, Playwright)
 - Chrome: `chrome://extensions` → Developer mode → "Load unpacked" → this folder.
 - Firefox: `about:debugging#/runtime/this-firefox` → "Load Temporary Add-on" → `manifest.json`
   (after `scripts/use.sh firefox`).
-- Store texts: [`store/LISTING.md`](store/LISTING.md). Website: `site/`, published by
+- Store texts: [`store/CHROME.md`](store/CHROME.md) and [`store/FIREFOX.md`](store/FIREFOX.md). Website: `site/`, published by
   `.github/workflows/pages.yml`.
 
 ## License

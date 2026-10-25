@@ -22,6 +22,15 @@ for (const size of [16, 32, 48, 128]) {
   await page.close();
 }
 
+// Chrome Web Store icon: 128x128 with the artwork at 96x96 and 16px of transparent padding
+{
+  const page = await browser.newPage({ viewport: { width: 128, height: 128 } });
+  const svg = fs.readFileSync(path.join(STORE, 'icon.svg'), 'utf8').replace('<svg ', '<svg width="96" height="96" ');
+  await page.setContent(`<style>html,body{margin:0;background:transparent}svg{display:block;margin:16px}</style>${svg}`);
+  await page.screenshot({ path: path.join(STORE, 'chrome-store-icon-128.png'), omitBackground: true });
+  await page.close();
+}
+
 // Store scenes
 const scenes = [
   ['hero', 1280, 800, 'screenshots/1-your-anilist-remembered.png'],

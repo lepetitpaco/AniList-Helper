@@ -438,7 +438,7 @@
     }
     const links = document.querySelector('.nav .links');
     if (!links || links.querySelector('.ah-nav-link')) return;
-    const model = links.querySelector('a.link');
+    const model = links.querySelector(':scope > a.link:not(.login):not(.signup)');
     if (!model) return;
     const navLink = element('a', 'link ah-nav-link', 'bookmarks');
     for (const attribute of model.attributes) {
@@ -452,8 +452,8 @@
       event.preventDefault();
       toggle(navLink);
     });
-    // Right after the last navigation link: logged out, Login / Sign Up follow in the same row
-    [...links.querySelectorAll(':scope > a.link')].pop().after(navLink);
+    // Right after the last navigation link; logged out, Login and Sign Up are links of the same row
+    [...links.querySelectorAll(':scope > a.link:not(.login):not(.signup)')].pop().after(navLink);
   }
 
   // One-click bookmark button next to the favourite heart

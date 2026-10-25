@@ -39,8 +39,9 @@ const context = await chromium.launchPersistentContext(fs.mkdtempSync(path.join(
 
 // Only AniList and its fonts: no ads, no trackers in the screenshots
 await context.route('**/*', route => {
-  const host = new URL(route.request().url()).hostname;
-  const allowed = /(^|\.)anilist\.co$|(^|\.)anili\.st$|fonts\.(googleapis|gstatic)\.com$/.test(host);
+  const url = new URL(route.request().url());
+  const allowed = url.protocol === 'chrome-extension:' ||
+    /(^|\.)anilist\.co$|(^|\.)anili\.st$|fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
   return allowed ? route.continue() : route.abort();
 });
 // Dark theme, as most screenshots of the site
@@ -94,7 +95,7 @@ const steps = {
 
   // Planning list, still airing, by popularity
   async planning() {
-    await open(`https://anilist.co/user/${USER}/animelist/Planning?status=RELEASING&sort=popularity`, '.medialist .entry .title a');
+    await open(`https://anilist.co/user/${USER}/animelist/Planning?status=RELEASING&sort=media.popularity`, '.medialist .entry .title a');
     await scrollTo('.medialist', 70);
     await shot('list-planning');
   },

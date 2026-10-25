@@ -1,4 +1,5 @@
-// Renders the extension icons and the store visuals with Chromium (Playwright).
+// Renders the extension icons and the store visuals (scenes.html around the real
+// captures of capture.mjs) with Chromium (Playwright).
 // Run through store/render.sh (Docker), from anywhere.
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'url';
@@ -8,7 +9,6 @@ import fs from 'fs';
 const STORE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.dirname(STORE);
 const url = file => 'file://' + path.join(ROOT, file);
-fs.mkdirSync(path.join(STORE, 'build'), { recursive: true });
 fs.mkdirSync(path.join(STORE, 'screenshots'), { recursive: true });
 
 const browser = await chromium.launch();
@@ -21,23 +21,6 @@ for (const size of [16, 32, 48, 128]) {
   await page.screenshot({ path: path.join(ROOT, `icons/icon-${size}.png`), omitBackground: true });
   await page.close();
 }
-
-// The real extension popup, with a mocked browser API
-const popup = await browser.newPage({ viewport: { width: 320, height: 600 }, deviceScaleFactor: 2 });
-await popup.addInitScript(() => {
-  const area = data => ({
-    get: async key => (key in data ? { [key]: data[key] } : {}),
-    set: async items => Object.assign(data, items),
-  });
-  window.chrome = {
-    storage: { sync: area({}), local: area({}), onChanged: { addListener() {} } },
-  };
-});
-await popup.goto(url('popup.html'));
-await popup.waitForTimeout(300);
-const height = await popup.evaluate(() => document.body.scrollHeight);
-await popup.screenshot({ path: path.join(STORE, 'build/popup.png'), clip: { x: 0, y: 0, width: 320, height } });
-await popup.close();
 
 // Store scenes
 const scenes = [

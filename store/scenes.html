@@ -3,7 +3,8 @@
 <!--
   Store visuals (Chrome Web Store, Firefox Add-ons, GitHub Pages), rendered by store/render.mjs.
   One scene per anchor: #hero, #filters, #bookmarks, #preferences, #popup, #promo, #marquee.
-  AniList's interface is mocked with fictional titles and gradient covers.
+  The pictures are real screenshots of anilist.co with the extension loaded, taken by
+  store/capture.mjs (1440x900 CSS pixels) and cropped here with .crop (--x, --y, --w, --h).
 -->
 <head>
   <meta charset="utf-8">
@@ -13,12 +14,9 @@
     :root {
       --bg: #0b1622;
       --fg: #151f2e;
-      --fg-2: #1c2a3d;
       --text: #9fadbd;
       --bright: #edf1f5;
-      --muted: #728aa1;
       --blue: #3db4f2;
-      --red: #ec294b;
       --green: #7bd555;
     }
     * { box-sizing: border-box; }
@@ -34,130 +32,59 @@
     }
 
     /* Copy column */
-    .copy { width: 470px; flex: none; padding: 0 30px 0 72px; display: flex; flex-direction: column; justify-content: center; }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 19px; color: var(--bright); margin-bottom: 34px; }
-    .brand img { width: 42px; height: 42px; }
-    .kicker { font-weight: 700; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
-    h1 { font-size: 48px; line-height: 1.05; letter-spacing: -.02em; margin: 0 0 20px; font-weight: 800; color: var(--bright); }
-    .lead { font-size: 19px; line-height: 1.5; margin: 0; }
-    .points { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 12px; font-size: 16px; color: var(--bright); }
+    .copy { width: 400px; flex: none; padding: 0 20px 0 60px; display: flex; flex-direction: column; justify-content: center; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; color: var(--bright); margin-bottom: 30px; }
+    .brand img { width: 40px; height: 40px; }
+    .kicker { font-weight: 700; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+    h1 { font-size: 42px; line-height: 1.06; letter-spacing: -.02em; margin: 0 0 18px; font-weight: 800; color: var(--bright); }
+    .lead { font-size: 17px; line-height: 1.5; margin: 0; }
+    .points { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 10px; font-size: 15px; color: var(--bright); }
     .points li { display: flex; gap: 12px; align-items: baseline; }
     .points li::before { content: ""; flex: 0 0 8px; height: 8px; border-radius: 50%; background: var(--blue); transform: translateY(-2px); }
-    .stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding-right: 48px; }
+    .stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; position: relative; padding-right: 40px; }
 
-    /* Browser window */
-    .browser { width: 740px; border-radius: 14px; overflow: hidden; background: var(--bg); box-shadow: 0 40px 90px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .06); }
-    .chrome { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: #1b2633; }
+    /* Browser window around a cropped capture */
+    .browser { width: 820px; border-radius: 12px; overflow: hidden; background: var(--bg); box-shadow: 0 40px 90px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .07); }
+    .chrome { display: flex; align-items: center; gap: 14px; padding: 10px 14px; background: #1b2633; }
     .dots { display: flex; gap: 7px; }
     .dots i { width: 11px; height: 11px; border-radius: 50%; background: #3a4757; }
-    .url { flex: 1; padding: 7px 14px; border-radius: 8px; background: #0f1823; font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .url { flex: 1; padding: 6px 12px; border-radius: 7px; background: #0f1823; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .url b { color: var(--bright); font-weight: 600; }
     .url .q { color: var(--blue); font-weight: 600; }
-    .url.glow { box-shadow: 0 0 0 2px var(--blue), 0 0 24px rgba(61, 180, 242, .45); }
+    .url.glow { box-shadow: 0 0 0 2px var(--blue), 0 0 22px rgba(61, 180, 242, .45); }
+    .crop { position: relative; width: 100%; aspect-ratio: calc(var(--w) / var(--h)); overflow: hidden; }
+    .crop img {
+      position: absolute;
+      width: calc(1440 / var(--w) * 100%);
+      left: calc(var(--x) / var(--w) * -100%);
+      top: calc(var(--y) / var(--h) * -100%);
+    }
 
-    /* AniList-like page */
-    .nav { display: flex; align-items: center; gap: 22px; padding: 0 22px; height: 50px; background: var(--fg); font-size: 13px; font-weight: 600; }
-    .nav .logo { width: 26px; height: 26px; border-radius: 6px; background: linear-gradient(135deg, #2b3a4d, #1c2a3d); margin-right: 14px; }
-    .nav a.on { color: var(--bright); }
-    .nav .bm { color: var(--blue); position: relative; }
-    .nav .spacer { flex: 1; }
-    .nav .me { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #9256f3, #3db4f2); }
-    .page { display: flex; gap: 22px; padding: 22px; }
-    .side { width: 170px; flex: none; font-size: 12px; }
-    .side .search { padding: 8px 10px; border-radius: 5px; background: var(--fg); color: var(--muted); margin-bottom: 14px; }
-    .side h4 { margin: 12px 0 6px; font-size: 11px; color: var(--muted); font-weight: 600; }
-    .side .item { padding: 5px 8px; border-radius: 4px; }
-    .side .item.on { background: var(--fg); color: var(--bright); }
-    .select { display: flex; justify-content: space-between; padding: 7px 10px; margin-bottom: 7px; border-radius: 5px; background: var(--fg); color: var(--muted); }
-    .select.set { color: var(--bright); }
-    .select.set span:last-child { color: var(--blue); }
-    .tags { display: flex; gap: 5px; margin-bottom: 7px; }
-    .tags span { padding: 3px 7px; border-radius: 4px; background: var(--blue); color: #fff; font-size: 11px; font-weight: 600; }
-    .list { flex: 1; min-width: 0; }
-    .list h3 { margin: 0 0 10px; font-size: 15px; color: var(--text); font-weight: 600; }
-    .table { border-radius: 6px; background: var(--fg); padding: 6px 0; }
-    .row { display: flex; align-items: center; gap: 14px; padding: 7px 14px; font-size: 13px; }
-    .row .cv { width: 34px; height: 46px; border-radius: 4px; flex: none; }
-    .row .t { flex: 1; color: var(--bright); }
-    .row .s { width: 44px; text-align: center; }
-    .row .p { width: 54px; text-align: center; }
-    .row .f { width: 40px; text-align: center; color: var(--muted); }
-
-    .c1 { background: linear-gradient(160deg, #ff9a62, #ec294b); }
-    .c2 { background: linear-gradient(160deg, #3db4f2, #9256f3); }
-    .c3 { background: linear-gradient(160deg, #7bd555, #1e8a6b); }
-    .c4 { background: linear-gradient(160deg, #f779a4, #9256f3); }
-    .c5 { background: linear-gradient(160deg, #ffd166, #f77f00); }
-    .c6 { background: linear-gradient(160deg, #6be3ff, #2a6fdb); }
-
-    /* Media page header */
-    .media-head { display: flex; gap: 26px; padding: 26px; background: linear-gradient(180deg, #1a2638 0%, var(--fg) 100%); }
-    .media-head .cover { width: 150px; height: 212px; border-radius: 6px; flex: none; }
-    .media-head h2 { margin: 6px 0 10px; font-size: 22px; color: var(--bright); font-weight: 700; }
-    .media-head p { margin: 0; font-size: 13px; line-height: 1.6; }
-    .actions { display: flex; gap: 10px; margin-top: 14px; }
-    .btn { height: 36px; border-radius: 5px; display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 600; }
-    .btn.status { width: 116px; background: var(--blue); }
-    .btn.heart { width: 36px; background: var(--red); }
-    .btn.bmk { width: 36px; background: var(--blue); }
-    .btn.glow { box-shadow: 0 0 0 3px rgba(61, 180, 242, .35), 0 0 26px rgba(61, 180, 242, .6); }
-    .btn svg { width: 15px; height: 15px; }
-
-    /* Bookmarks panel */
-    .panel { position: absolute; width: 300px; border-radius: 6px; background: var(--fg); box-shadow: 0 18px 40px rgba(0, 0, 0, .5); font-size: 12px; overflow: hidden; }
-    .panel .ph { display: flex; align-items: center; justify-content: space-between; padding: 11px 13px; border-bottom: 1px solid rgba(159, 173, 189, .15); color: var(--bright); font-weight: 700; font-size: 13px; }
-    .panel .ph span:last-child { padding: 5px 9px; border-radius: 4px; background: rgba(159, 173, 189, .2); color: var(--text); font-size: 12px; }
-    .panel h5 { margin: 10px 13px 5px; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
-    .panel .bm-row { display: flex; align-items: center; gap: 10px; padding: 5px 13px; }
-    .panel .bm-row .cv { width: 26px; height: 36px; border-radius: 3px; flex: none; }
-    .panel .bm-row b { display: block; color: var(--bright); font-weight: 600; }
-    .panel .bm-row small { color: var(--muted); font-size: 11px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 13px 12px; }
-    .chips span { padding: 4px 8px; border-radius: 4px; background: rgba(159, 173, 189, .12); font-size: 11px; }
-
-    /* Chat bubble (filters scene) */
-    .bubble { position: absolute; width: 380px; padding: 16px 18px; border-radius: 14px; background: #313338; color: #dbdee1; box-shadow: 0 24px 60px rgba(0, 0, 0, .5); font-family: -apple-system, "Segoe UI", sans-serif; }
+    /* Callouts */
+    .bubble { position: absolute; width: 360px; padding: 14px 16px; border-radius: 12px; background: #313338; color: #dbdee1; box-shadow: 0 24px 60px rgba(0, 0, 0, .55); font-family: -apple-system, "Segoe UI", sans-serif; }
     .bubble .who { font-weight: 600; color: #f2f3f5; font-size: 14px; margin-bottom: 4px; }
     .bubble .who time { font-weight: 400; color: #949ba4; font-size: 11px; margin-left: 6px; }
     .bubble p { margin: 0; font-size: 14px; line-height: 1.45; }
     .bubble a { color: #00a8fc; text-decoration: none; word-break: break-all; }
-    .toast { position: absolute; display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 10px; background: var(--fg); color: var(--bright); font-size: 14px; font-weight: 600; box-shadow: 0 18px 40px rgba(0, 0, 0, .5); }
+    .toast { position: absolute; display: flex; align-items: center; gap: 10px; padding: 11px 15px; border-radius: 10px; background: var(--fg); color: var(--bright); font-size: 14px; font-weight: 600; box-shadow: 0 18px 40px rgba(0, 0, 0, .5); }
     .toast i { width: 22px; height: 22px; border-radius: 50%; background: var(--green); display: grid; place-items: center; color: var(--bg); font-style: normal; font-weight: 800; font-size: 13px; }
+    .label { align-self: flex-start; margin: 0 0 -8px 2px; font-size: 13px; font-weight: 700; color: var(--bright); }
+    .label em { font-style: normal; color: var(--green); font-weight: 600; margin-left: 8px; }
 
-    /* Preference cards */
-    .cards { display: grid; gap: 18px; width: 620px; }
-    .card { padding: 20px 22px; border-radius: 10px; background: var(--fg); box-shadow: 0 20px 50px rgba(0, 0, 0, .4); }
-    .card .label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 13px; color: var(--muted); font-weight: 600; }
-    .card .label em { font-style: normal; color: var(--green); font-size: 12px; }
-    .card .label em::before { content: "✓ "; }
-    .card .ui { display: flex; align-items: center; gap: 12px; }
-    .dropdown { padding: 9px 14px; border-radius: 5px; background: var(--fg-2); color: var(--bright); font-size: 14px; min-width: 150px; display: flex; justify-content: space-between; gap: 20px; }
-    .va { display: flex; align-items: center; gap: 10px; padding: 6px 10px 6px 6px; border-radius: 5px; background: var(--fg-2); font-size: 12px; }
-    .va .face { width: 34px; height: 34px; border-radius: 4px; }
-    .va b { display: block; color: var(--bright); font-weight: 600; }
-    .seg { display: flex; border-radius: 5px; overflow: hidden; background: var(--fg-2); font-size: 13px; }
-    .seg span { padding: 9px 14px; }
-    .seg span.on { background: var(--blue); color: #fff; font-weight: 600; }
-    .check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--bright); }
-    .check i { width: 16px; height: 16px; border-radius: 3px; background: var(--blue); display: grid; place-items: center; color: #fff; font-style: normal; font-size: 11px; }
-
-    /* Popup scene */
-    .popup-shot { width: 380px; border-radius: 12px; box-shadow: 0 40px 90px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .06); }
+    .popup-shot { width: 360px; border-radius: 12px; box-shadow: 0 40px 90px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .07); }
 
     /* Promo tiles */
-    #promo { flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 14px; }
+    #promo { flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; }
     #promo img { width: 84px; height: 84px; }
     #promo h1 { font-size: 34px; margin: 0; }
-    #promo p { margin: 0; font-size: 15px; color: var(--text); }
+    #promo p { margin: 0; font-size: 15px; }
     #marquee .copy { width: 560px; padding-left: 90px; }
-    #marquee h1 { font-size: 54px; }
+    #marquee h1 { font-size: 52px; }
   </style>
 </head>
 <body>
 
-<template id="bookmark-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12a1 1 0 0 1 1 1v19l-7-4.5L5 22V3a1 1 0 0 1 1-1z"/></svg></template>
-
-<!-- 1. Hero -->
+<!-- 1. Hero: filtered list opened from a link -->
 <section class="scene backdrop" id="hero">
   <div class="copy">
     <div class="brand"><img src="icon.svg" alt="">AniList Helper</div>
@@ -173,30 +100,8 @@
   </div>
   <div class="stage">
     <div class="browser">
-      <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url glow"><b>anilist.co</b>/user/you/animelist<span class="q">?format=TV&amp;genres=Action,Comedy&amp;sort=score</span></div></div>
-      <div class="nav"><span class="logo"></span><a>Home</a><a>Profile</a><a class="on">Anime List</a><a>Manga List</a><a>Browse</a><a>Forum</a><a class="bm">Bookmarks</a><span class="spacer"></span><span class="me"></span></div>
-      <div class="page">
-        <div class="side">
-          <div class="search">Filter</div>
-          <h4>Lists</h4>
-          <div class="item">All</div><div class="item on">Watching</div><div class="item">Planning</div><div class="item">Completed</div>
-          <h4>Filters</h4>
-          <div class="select set"><span>Format</span><span>TV</span></div>
-          <div class="tags"><span>Action</span><span>Comedy</span></div>
-          <div class="select"><span>Status</span><span>▾</span></div>
-          <div class="select set"><span>Sort</span><span>Score</span></div>
-        </div>
-        <div class="list">
-          <h3>Watching</h3>
-          <div class="table">
-            <div class="row"><span class="cv c1"></span><span class="t">Starfall Academy</span><span class="s">9</span><span class="p">8/12</span><span class="f">TV</span></div>
-            <div class="row"><span class="cv c2"></span><span class="t">Neon Ronin: Second Act</span><span class="s">8.5</span><span class="p">5/13</span><span class="f">TV</span></div>
-            <div class="row"><span class="cv c3"></span><span class="t">The Lunar Bakery</span><span class="s">8</span><span class="p">10/24</span><span class="f">TV</span></div>
-            <div class="row"><span class="cv c4"></span><span class="t">Paper Spirits</span><span class="s">7.5</span><span class="p">3/12</span><span class="f">TV</span></div>
-            <div class="row"><span class="cv c5"></span><span class="t">Iron Tides</span><span class="s">7</span><span class="p">17/25</span><span class="f">TV</span></div>
-          </div>
-        </div>
-      </div>
+      <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url glow"><b>anilist.co</b>/user/lepetitpaco/animelist<span class="q">?format=TV&amp;genres=Action,Comedy&amp;sort=score</span></div></div>
+      <div class="crop" style="--x: 185; --y: 60; --w: 1070; --h: 840;"><img src="captures/list-filters.png" alt=""></div>
     </div>
   </div>
 </section>
@@ -207,36 +112,18 @@
     <div class="brand"><img src="icon.svg" alt="">AniList Helper</div>
     <div class="kicker">Persistent list filters</div>
     <h1>Filters that stick. Links that share.</h1>
-    <p class="lead">Format, status, genres, country, year, search and sort live in the URL and in your browser. Reload, come back tomorrow, or send the link: the list opens filtered.</p>
+    <p class="lead">Format, status, genres, country, year, search and sort live in the URL and in your browser. Reload, come back tomorrow, or send the link: the list opens filtered. Reset clears it all.</p>
   </div>
   <div class="stage">
-    <div class="browser" style="width: 700px; transform: translate(-30px, -60px);">
-      <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url glow"><b>anilist.co</b>/user/you/animelist/Planning<span class="q">?status=RELEASING&amp;sort=popularity</span></div></div>
-      <div class="nav"><span class="logo"></span><a>Home</a><a>Profile</a><a class="on">Anime List</a><a>Manga List</a><a>Browse</a><span class="spacer"></span><span class="me"></span></div>
-      <div class="page">
-        <div class="side">
-          <div class="search">Filter</div>
-          <h4>Filters</h4>
-          <div class="select"><span>Format</span><span>▾</span></div>
-          <div class="select set"><span>Status</span><span>Releasing</span></div>
-          <div class="select"><span>Country</span><span>▾</span></div>
-          <div class="select set"><span>Sort</span><span>Popularity</span></div>
-        </div>
-        <div class="list">
-          <h3>Planning</h3>
-          <div class="table">
-            <div class="row"><span class="cv c6"></span><span class="t">Crimson Orbit</span><span class="f">TV</span></div>
-            <div class="row"><span class="cv c2"></span><span class="t">Neon Ronin: Second Act</span><span class="f">TV</span></div>
-            <div class="row"><span class="cv c5"></span><span class="t">Iron Tides</span><span class="f">TV</span></div>
-          </div>
-        </div>
-      </div>
+    <div class="browser" style="transform: translate(-20px, -40px);">
+      <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url glow"><b>anilist.co</b>/user/lepetitpaco/animelist/Planning<span class="q">?status=RELEASING&amp;sort=media.popularity</span></div></div>
+      <div class="crop" style="--x: 185; --y: 60; --w: 1070; --h: 840;"><img src="captures/list-planning.png" alt=""></div>
     </div>
-    <div class="bubble" style="right: 70px; bottom: 120px;">
-      <div class="who">you <time>Today at 21:04</time></div>
-      <p>what's still airing in my planning list 👇<br><a>anilist.co/user/you/animelist/Planning?status=RELEASING&amp;sort=popularity</a></p>
+    <div class="bubble" style="right: 60px; bottom: 96px;">
+      <div class="who">lepetitpaco <time>Today at 21:04</time></div>
+      <p>what's still airing in my planning list 👇<br><a>anilist.co/user/lepetitpaco/animelist/Planning?status=RELEASING&amp;sort=media.popularity</a></p>
     </div>
-    <div class="toast" style="right: 70px; bottom: 58px;"><i>✓</i>Opens with the same filters for other AniList Helper users</div>
+    <div class="toast" style="right: 60px; bottom: 36px;"><i>✓</i>Opens with the same filters for other AniList Helper users</div>
   </div>
 </section>
 
@@ -249,32 +136,9 @@
     <p class="lead">Save any anime, manga, character, staff or studio with the button next to the heart. Find them, and handy shortcuts, under <b style="color: var(--bright)">Bookmarks</b> in the top bar or with Alt+B.</p>
   </div>
   <div class="stage">
-    <div class="browser" style="position: relative;">
-      <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url"><b>anilist.co</b>/anime/1/starfall-academy</div></div>
-      <div class="nav"><span class="logo"></span><a>Home</a><a>Profile</a><a>Anime List</a><a>Manga List</a><a>Browse</a><a>Forum</a><a class="bm">Bookmarks</a><span class="spacer"></span><span class="me"></span></div>
-      <div class="media-head">
-        <div>
-          <div class="cover c1"></div>
-          <div class="actions"><div class="btn status">Watching</div><div class="btn heart">♥</div><div class="btn bmk glow" data-icon></div></div>
-        </div>
-        <div style="max-width: 300px;">
-          <h2>Starfall Academy</h2>
-          <p>Students at a school orbiting a dying star race to rebuild the academy's last working telescope before the light goes out for good.</p>
-        </div>
-      </div>
-      <div style="height: 150px; background: var(--bg);"></div>
-      <div class="panel" style="top: 100px; right: 40px;">
-        <div class="ph"><span>Bookmarks</span><span>Bookmarked</span></div>
-        <h5>Bookmarks</h5>
-        <div class="bm-row"><span class="cv c1"></span><span><b>Starfall Academy</b><small>Anime</small></span></div>
-        <div class="bm-row"><span class="cv c4"></span><span><b>Mira Okonkwo</b><small>Staff</small></span></div>
-        <div class="bm-row"><span class="cv c6"></span><span><b>Crimson Orbit</b><small>Manga</small></span></div>
-        <div class="bm-row"><span class="cv" style="background: var(--fg-2)"></span><span><b>Fall 2026, TV, by popularity</b><small>/search/anime?season=FALL…</small></span></div>
-        <h5>My pages</h5>
-        <div class="chips"><span>Anime List</span><span>Manga List</span><span>Stats</span><span>Favorites</span><span>Social</span></div>
-        <h5>Browse</h5>
-        <div class="chips"><span>This Season</span><span>Next Season</span><span>Trending Anime</span><span>Top 100 Anime</span></div>
-      </div>
+    <div class="browser">
+      <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url"><b>anilist.co</b>/anime/16498/Shingeki-no-Kyojin/</div></div>
+      <div class="crop" style="--x: 185; --y: 0; --w: 1070; --h: 640;"><img src="captures/bookmarks-panel.png" alt=""></div>
     </div>
   </div>
 </section>
@@ -285,32 +149,16 @@
     <div class="brand"><img src="icon.svg" alt="">AniList Helper</div>
     <div class="kicker">Remembered preferences</div>
     <h1>Pick it once. It stays.</h1>
-    <p class="lead">AniList resets these on every page. AniList Helper keeps your choice, in your browser only.</p>
+    <p class="lead">AniList resets these on every page. AniList Helper keeps your choice: voice actor language, stats sorting, and role sorting on staff and character pages.</p>
   </div>
   <div class="stage">
-    <div class="cards">
-      <div class="card">
-        <div class="label">Anime › Characters: voice actor language <em>Remembered</em></div>
-        <div class="ui">
-          <div class="dropdown"><span>French</span><span>▾</span></div>
-          <div class="va"><span class="face c2"></span><span><b>Camille Laurent</b>French</span></div>
-          <div class="va"><span class="face c3"></span><span><b>Hugo Bernard</b>French</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="label">Stats › Genres: sorting <em>Remembered per stats page</em></div>
-        <div class="ui">
-          <div class="seg"><span>Count</span><span>Time Watched</span><span class="on">Mean Score</span></div>
-          <div class="seg"><span class="on">Anime</span><span>Characters</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="label">Staff &amp; characters › roles <em>Remembered</em></div>
-        <div class="ui">
-          <div class="dropdown"><span>Popularity</span><span>▾</span></div>
-          <div class="check"><i>✓</i>On my list</div>
-        </div>
-      </div>
+    <div class="label">Characters tab<em>✓ French, on every anime</em></div>
+    <div class="browser" style="width: 780px;">
+      <div class="crop" style="--x: 440; --y: 80; --w: 815; --h: 285;"><img src="captures/voice-actors.png" alt=""></div>
+    </div>
+    <div class="label">Stats<em>✓ Mean Score, per stats page</em></div>
+    <div class="browser" style="width: 780px;">
+      <div class="crop" style="--x: 395; --y: 0; --w: 860; --h: 255;"><img src="captures/stats.png" alt=""></div>
     </div>
   </div>
 </section>
@@ -321,14 +169,14 @@
     <div class="brand"><img src="icon.svg" alt="">AniList Helper</div>
     <div class="kicker">Your call</div>
     <h1>Turn any feature on or off.</h1>
-    <p class="lead">Every tweak has its own switch, applied right away on open AniList tabs.</p>
+    <p class="lead">Every tweak has its own switch, and you choose where the bookmark buttons show up. Changes apply right away.</p>
     <ul class="points">
       <li>No AniList API calls, nothing changed on your account</li>
       <li>No tracking, no analytics</li>
       <li>Open source</li>
     </ul>
   </div>
-  <div class="stage"><img class="popup-shot" src="build/popup.png" alt=""></div>
+  <div class="stage"><img class="popup-shot" src="captures/popup.png" alt=""></div>
 </section>
 
 <!-- Small promo tile 440x280 -->
@@ -345,31 +193,15 @@
     <h1>Your AniList, remembered.</h1>
     <p class="lead">Persistent and shareable list filters, one-click bookmarks, remembered sorting and voice actor language.</p>
   </div>
-  <div class="stage" style="justify-content: flex-start; padding-left: 40px;">
-    <div class="browser" style="width: 700px; transform: translateY(60px);">
-      <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url glow"><b>anilist.co</b>/user/you/animelist<span class="q">?format=TV&amp;genres=Action,Comedy</span></div></div>
-      <div class="nav"><span class="logo"></span><a>Home</a><a>Profile</a><a class="on">Anime List</a><a>Manga List</a><a>Browse</a><a class="bm">Bookmarks</a><span class="spacer"></span><span class="me"></span></div>
-      <div class="page">
-        <div class="side">
-          <h4>Filters</h4>
-          <div class="select set"><span>Format</span><span>TV</span></div>
-          <div class="tags"><span>Action</span><span>Comedy</span></div>
-        </div>
-        <div class="list">
-          <div class="table">
-            <div class="row"><span class="cv c1"></span><span class="t">Starfall Academy</span><span class="s">9</span></div>
-            <div class="row"><span class="cv c2"></span><span class="t">Neon Ronin: Second Act</span><span class="s">8.5</span></div>
-            <div class="row"><span class="cv c3"></span><span class="t">The Lunar Bakery</span><span class="s">8</span></div>
-          </div>
-        </div>
-      </div>
+  <div class="stage" style="align-items: flex-start; padding-left: 30px;">
+    <div class="browser" style="width: 720px; transform: translateY(70px);">
+      <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url glow"><b>anilist.co</b>/user/lepetitpaco/animelist<span class="q">?format=TV&amp;genres=Action,Comedy</span></div></div>
+      <div class="crop" style="--x: 185; --y: 60; --w: 1070; --h: 840;"><img src="captures/list-filters.png" alt=""></div>
     </div>
   </div>
 </section>
 
 <script>
-  const icon = document.getElementById('bookmark-icon').innerHTML;
-  document.querySelectorAll('[data-icon]').forEach(el => { el.innerHTML = icon; });
   const show = () => {
     document.querySelectorAll('.scene').forEach(s => s.classList.toggle('on', '#' + s.id === (location.hash || '#hero')));
   };

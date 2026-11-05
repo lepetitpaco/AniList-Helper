@@ -49,11 +49,27 @@ function ahDefaultSettings() {
   );
 }
 
+// storage.sync can exist and still fail (Electron, e.g. homedash: '"sync" is not available'):
+// after the first failure, settings go through storage.local. Chrome and Firefox keep sync.
+var ahSettingsArea = null;
+
+async function ahSettingsStorage() {
+  if (!ahSettingsArea) {
+    try {
+      await ahApi().storage.sync.get('settings');
+      ahSettingsArea = 'sync';
+    } catch {
+      ahSettingsArea = 'local';
+    }
+  }
+  return ahApi().storage[ahSettingsArea];
+}
+
 async function ahLoadSettings() {
-  const { settings } = await ahApi().storage.sync.get('settings');
+  const { settings } = await (await ahSettingsStorage()).get('settings');
   return { ...ahDefaultSettings(), ...settings };
 }
 
 async function ahSaveSettings(settings) {
-  await ahApi().storage.sync.set({ settings });
+  await (await ahSettingsStorage()).set({ settings });
 }

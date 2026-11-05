@@ -591,7 +591,7 @@
     window.addEventListener('scroll', () => isOpen() && requestAnimationFrame(positionPanel), { passive: true });
     window.addEventListener('popstate', scheduleRefresh);
     ahApi().storage.onChanged.addListener(async (changes, area) => {
-      if (area === 'sync' && changes.settings) applySettings();
+      if ((area === 'sync' || area === 'local') && changes.settings) applySettings();
       if (area === 'local' && changes[STORAGE_KEY]) {
         // Bookmarks edited from another tab
         await loadBookmarks();

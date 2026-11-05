@@ -12,7 +12,7 @@
   ahLoadSettings().then(publish);
 
   ahApi().storage.onChanged.addListener((changes, area) => {
-    if (area === 'sync' && changes.settings) ahLoadSettings().then(publish);
+    if ((area === 'sync' || area === 'local') && changes.settings) ahLoadSettings().then(publish);
   });
 
   // Development only: background.js ignores this outside an unpacked build

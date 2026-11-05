@@ -24,3 +24,8 @@ Aucune.
 Pas encore sur les stores au dernier passage (voir `README.md`). Demander avant le premier envoi.
 
 **Réservé à la personne : Chrome Web Store**, Claude n'y a pas accès.
+
+## Notes
+
+- Pas encore de `CHANGELOG.md` : le créer à la prochaine version.
+- Zips : `scripts/package.sh` ; `scripts/use.sh chrome|firefox` choisit le manifest actif. `packages/` est ignoré par git : les zips vont dans la release GitHub.
